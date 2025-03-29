@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { BsArrowRight, BsEnvelope, BsLock, BsCheck } from "react-icons/bs";
 import { Loader2 } from "lucide-react";
@@ -13,21 +13,31 @@ import { loginAdmin, saveTokens, saveUserInfo } from "@/lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [remember, setRemember] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [verificationRequired, setVerificationRequired] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const [verificationSuccess, setVerificationSuccess] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+
+    // Check if user just verified their email
+    if (searchParams.get("verified") === "true") {
+      setVerificationSuccess(true);
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
+    setVerificationRequired(false);
 
     try {
       // Call the API for admin login
@@ -40,9 +50,23 @@ export default function LoginPage() {
       // Redirect to dashboard
       router.push("/dashboard");
     } catch (err: Error | unknown) {
-      setError(
-        err instanceof Error ? err.message : "Email atau password tidak valid"
-      );
+      if (err instanceof Error) {
+        // Check if error message contains verification related keywords
+        const errorMessage = err.message;
+        if (
+          errorMessage.includes("tidak terverifikasi") ||
+          errorMessage.includes("belum terverifikasi") ||
+          errorMessage.includes("not verified") ||
+          errorMessage.includes("Email not verified")
+        ) {
+          setVerificationRequired(true);
+          setUserEmail(email);
+        } else {
+          setError(errorMessage);
+        }
+      } else {
+        setError("Email atau password tidak valid");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -82,6 +106,38 @@ export default function LoginPage() {
               Login untuk mengakses sistem manajemen akademik
             </p>
           </div>
+
+          {verificationSuccess && (
+            <div className="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 text-sm rounded">
+              <p className="font-medium">Verifikasi Email Berhasil</p>
+              <p className="text-green-600/80 text-sm">
+                Email Anda telah berhasil diverifikasi. Anda sekarang dapat
+                login ke akun Anda.
+              </p>
+            </div>
+          )}
+
+          {verificationRequired && (
+            <div className="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 text-blue-700 text-sm rounded">
+              <p className="font-medium">Verifikasi Email Diperlukan</p>
+              <p className="text-blue-600/80 text-sm">
+                Akun Anda belum diverifikasi. Silakan periksa email Anda (
+                {userEmail}) untuk link verifikasi.
+              </p>
+              <button
+                onClick={() =>
+                  router.push(
+                    `/resend-verification?email=${encodeURIComponent(
+                      userEmail
+                    )}`
+                  )
+                }
+                className="mt-2 text-sm text-blue-700 font-medium underline hover:text-blue-600"
+              >
+                Kirim ulang email verifikasi
+              </button>
+            </div>
+          )}
 
           {error && (
             <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm rounded">
@@ -153,6 +209,13 @@ export default function LoginPage() {
                   {remember && <BsCheck className="w-3 h-3 text-white" />}
                 </div>
                 <span className="ml-2 text-sm text-[#475569]">Ingat saya</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => router.push("/forgot-password")}
+                className="ml-auto text-sm text-[#0687C9] hover:text-[#0466a2] focus:outline-none"
+              >
+                Lupa Password?
               </button>
             </div>
 

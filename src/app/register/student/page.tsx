@@ -287,11 +287,6 @@ export default function StudentRegisterPage() {
 
       // Show success message
       setSuccess(true);
-
-      // Redirect to home page after 2 seconds
-      setTimeout(() => {
-        router.push("/");
-      }, 2000);
     } catch (err: Error | unknown) {
       setError(
         err instanceof Error ? err.message : "Gagal melakukan registrasi"
@@ -318,16 +313,24 @@ export default function StudentRegisterPage() {
             <h2 className="text-xl font-bold text-[#1A202C] mb-2">
               Pendaftaran Berhasil!
             </h2>
-            <p className="text-center text-[#64748B] mb-6">
-              Akun mahasiswa telah berhasil terdaftar. Anda akan diarahkan ke
-              halaman beranda.
+            <p className="text-center text-[#64748B] mb-4">
+              Akun mahasiswa telah berhasil terdaftar. Silakan periksa email
+              Anda untuk tautan verifikasi.
             </p>
+            <div className="bg-blue-50 p-4 rounded-lg mb-6 text-blue-700 text-sm">
+              <p className="font-medium mb-1">Verifikasi Email</p>
+              <p className="text-blue-600/80">
+                Kami telah mengirimkan email verifikasi ke {formData.email}.
+                Silakan klik tautan verifikasi dalam email untuk mengaktifkan
+                akun Anda.
+              </p>
+            </div>
             <Button
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/login")}
               className="w-full h-11 bg-[#0687C9] hover:bg-[#0466a2] text-white font-medium rounded-lg transition-colors"
             >
               <div className="flex items-center justify-center">
-                <span>Lanjut ke Beranda</span>
+                <span>Lanjut ke Login</span>
                 <BsArrowRight className="ml-2 h-4 w-4" />
               </div>
             </Button>

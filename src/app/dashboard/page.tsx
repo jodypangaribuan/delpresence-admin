@@ -18,7 +18,7 @@ import Link from "next/link";
 
 export default function DashboardPage() {
   const [stats] = useState({
-    students: 1423,
+    students: 1615,
     lecturers: 98,
     courses: 76,
     attendanceToday: 243,

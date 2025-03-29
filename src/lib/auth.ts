@@ -65,6 +65,13 @@ export interface RegistrationResponse {
   data: User;
 }
 
+// Response for simple success/error API calls
+export interface ApiResponse {
+  status: string;
+  message: string;
+  data?: unknown;
+}
+
 // Admin login function
 export async function loginAdmin(
   email: string,
@@ -214,4 +221,26 @@ export function getUser(): User | null {
   } catch {
     return null;
   }
+}
+
+// Resend verification email
+export async function resendVerificationEmail(
+  email: string
+): Promise<ApiResponse> {
+  const response = await fetch(`${API_URL}/auth/resend-verification`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(
+      errorData.message || "Gagal mengirim ulang email verifikasi"
+    );
+  }
+
+  return response.json();
 }

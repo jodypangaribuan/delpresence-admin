@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { BsArrowRight } from "react-icons/bs";
+import { BsDownload } from "react-icons/bs";
 
 import Stack from "@/components/ui/Stack/Stack";
 import { useEffect, useState } from "react";
@@ -17,46 +17,50 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-50">
+    <div
+      className="min-h-screen flex flex-col"
+      style={{
+        background: "linear-gradient(to bottom, #dbeafe, #e0f2fe, #dbeafe)",
+        backgroundColor: "#dbeafe", // blue-100 fallback
+      }}
+    >
       {/* Hero Section with animated gradient background */}
       <main className="flex-grow">
         <div className="relative overflow-hidden">
-          {/* Remove the background div since we've added it to the parent */}
-
           {/* Hero Content */}
-          <div className="relative z-10 container mx-auto px-4 py-24 md:py-40">
+          <div className="relative z-10 container mx-auto px-4 sm:px-6 py-16 sm:py-20 md:py-28 lg:py-32 xl:py-36">
             <div className="max-w-6xl mx-auto">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-12 md:gap-20">
-                <div className="md:w-1/2 text-center md:text-left">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-8 lg:gap-12 xl:gap-20">
+                <div className="md:w-1/2 text-center md:text-left max-w-xl mx-auto md:mx-0">
                   <Image
                     src="/images/logo2.png"
                     alt="DelPresence Logo"
                     width={220}
                     height={70}
-                    className="h-auto object-contain mx-auto md:mx-0 mb-6"
+                    className="h-auto w-auto max-w-[180px] md:max-w-[200px] lg:max-w-[220px] object-contain mx-auto md:mx-0 mb-4 md:mb-6"
                   />
-                  <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-800 mb-6 leading-tight">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-bold text-slate-800 mb-4 sm:mb-6 leading-tight">
                     Sistem Kehadiran Digital{" "}
                     <span className="text-[#0687C9]">
                       Institut Teknologi Del
                     </span>
                   </h1>
-                  <p className="text-slate-600 text-lg mb-8 max-w-xl">
+                  <p className="text-base sm:text-lg text-slate-600 mb-6 sm:mb-8 max-w-xl">
                     Platform terintegrasi untuk manajemen presensi perkuliahan
                     yang efisien, cepat dan akurat bagi seluruh civitas
                     akademika.
                   </p>
-                  <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 mb-8">
+                  <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 mb-6 sm:mb-8">
                     <Link
-                      href="/register"
-                      className="w-full sm:w-auto px-8 py-3.5 bg-[#0687C9] text-white font-medium rounded-xl shadow-lg hover:bg-[#0078B5] transition-colors flex items-center justify-center group"
+                      href="#"
+                      className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-3.5 bg-[#0687C9] hover:bg-[#0078B5] text-white font-medium rounded-xl shadow-lg transition-colors flex items-center justify-center group"
                     >
-                      <span>Daftar</span>
-                      <BsArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      <BsDownload className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                      <span>Download Sekarang</span>
                     </Link>
                   </div>
 
-                  <div className="flex flex-wrap justify-center md:justify-start gap-6 text-sm text-slate-500">
+                  <div className="flex flex-wrap justify-center md:justify-start gap-4 sm:gap-6 text-xs sm:text-sm text-slate-500">
                     <Link
                       href="/privacy-policy"
                       className="hover:text-[#0687C9] transition-colors"
@@ -80,16 +84,19 @@ export default function Home() {
                     </p>
                   </div>
                 </div>
-                <div className="md:w-1/2 lg:w-3/5">
-                  <div className="relative">
-                    <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-[#0687C9] to-[#00A3FF] opacity-20 blur-2xl"></div>
-                    <div className="relative rounded-2xl overflow-hidden flex items-center justify-center p-8">
+                <div className="md:w-1/2 lg:w-1/2 xl:w-3/5 hidden md:block">
+                  <div className="relative max-w-[600px] mx-auto">
+                    <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-[#0687C9]/10 to-[#00A3FF]/10 opacity-80 blur-xl"></div>
+                    <div className="relative rounded-2xl overflow-visible flex items-center justify-center p-8 lg:p-10">
                       {/* Image Stack from ReactBits - Only render on client to avoid hydration issues */}
                       {isClient && (
                         <Stack
                           randomRotation={false}
-                          cardDimensions={{ width: 450, height: 300 }}
-                          sensitivity={100}
+                          cardDimensions={{
+                            width: Math.min(450, window.innerWidth * 0.8),
+                            height: Math.min(300, window.innerWidth * 0.5),
+                          }}
+                          sensitivity={60}
                           sendToBackOnClick={true}
                           animationConfig={{ stiffness: 300, damping: 25 }}
                           cardsData={[

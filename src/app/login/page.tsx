@@ -1,71 +1,69 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { BsArrowRight, BsEnvelope, BsLock, BsCheck } from "react-icons/bs";
+import { Card } from "@/components/ui/card";
+import {
+  BsArrowRight,
+  BsLock,
+  BsCheck,
+  BsPerson,
+  BsEyeSlash,
+  BsEye,
+} from "react-icons/bs";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { loginAdmin, saveTokens, saveUserInfo } from "@/lib/auth";
+
+// Import auth components
+import { login, UserRole } from "@/services/auth";
 
 export default function LoginPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const [email, setEmail] = useState("");
+  const [mounted, setMounted] = useState(false);
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [remember, setRemember] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const [verificationRequired, setVerificationRequired] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
-  const [verificationSuccess, setVerificationSuccess] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-
-    // Check if user just verified their email
-    if (searchParams.get("verified") === "true") {
-      setVerificationSuccess(true);
-    }
-  }, [searchParams]);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-    setVerificationRequired(false);
 
     try {
-      // Call the API for admin login
-      const response = await loginAdmin(email, password);
+      // Login with campus API
+      const response = await login(username, password);
 
-      // Save auth data to localStorage
-      saveTokens(response.data.tokens);
-      saveUserInfo(response.data.user, response.data.user_type);
-
-      // Redirect to dashboard
-      router.push("/dashboard");
-    } catch (err: Error | unknown) {
-      if (err instanceof Error) {
-        // Check if error message contains verification related keywords
-        const errorMessage = err.message;
+      // Check user role and redirect to dashboard
+      if (response.result && response.user) {
         if (
-          errorMessage.includes("tidak terverifikasi") ||
-          errorMessage.includes("belum terverifikasi") ||
-          errorMessage.includes("not verified") ||
-          errorMessage.includes("Email not verified")
+          response.user.role === UserRole.LECTURER ||
+          response.user.role === UserRole.ASSISTANT ||
+          response.user.role === UserRole.ADMIN
         ) {
-          setVerificationRequired(true);
-          setUserEmail(email);
+          router.push("/dashboard");
         } else {
-          setError(errorMessage);
+          throw new Error(
+            "Anda tidak memiliki akses ke sistem ini. Hanya Admin, Dosen, dan Asisten Dosen yang dapat mengakses."
+          );
         }
       } else {
-        setError("Email atau password tidak valid");
+        throw new Error("Login gagal. Silakan coba lagi.");
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Kredensial tidak valid");
       }
     } finally {
       setIsLoading(false);
@@ -107,64 +105,33 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {verificationSuccess && (
-            <div className="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 text-sm rounded">
-              <p className="font-medium">Verifikasi Email Berhasil</p>
-              <p className="text-green-600/80 text-sm">
-                Email Anda telah berhasil diverifikasi. Anda sekarang dapat
-                login ke akun Anda.
-              </p>
-            </div>
-          )}
-
-          {verificationRequired && (
-            <div className="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 text-blue-700 text-sm rounded">
-              <p className="font-medium">Verifikasi Email Diperlukan</p>
-              <p className="text-blue-600/80 text-sm">
-                Akun Anda belum diverifikasi. Silakan periksa email Anda (
-                {userEmail}) untuk link verifikasi.
-              </p>
-              <button
-                onClick={() =>
-                  router.push(
-                    `/resend-verification?email=${encodeURIComponent(
-                      userEmail
-                    )}`
-                  )
-                }
-                className="mt-2 text-sm text-blue-700 font-medium underline hover:text-blue-600"
-              >
-                Kirim ulang email verifikasi
-              </button>
-            </div>
-          )}
-
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm rounded">
-              <p className="font-medium">Login Gagal</p>
-              <p className="text-red-600/80 text-sm">{error}</p>
-            </div>
-          )}
-
+          {/* Unified Login Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
+            {error && (
+              <div className="p-3 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm rounded">
+                <p className="font-medium">Login Gagal</p>
+                <p className="text-red-600/80 text-sm">{error}</p>
+              </div>
+            )}
+
             <div className="space-y-2">
               <Label
-                htmlFor="email"
+                htmlFor="username"
                 className="text-[#334155] font-medium text-sm"
               >
-                Email
+                Username
               </Label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <BsEnvelope className="h-4 w-4 text-[#0687C9]" />
+                  <BsPerson className="h-4 w-4 text-[#0687C9]" />
                 </div>
                 <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  id="username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   className="w-full pl-10 py-2 h-11 bg-[#F8FAFC] border-[#E2E8F0] rounded-lg focus:ring-[#0687C9] focus:border-[#0687C9]"
-                  placeholder="Masukkan email anda"
+                  placeholder="Masukkan username anda"
                   required
                 />
               </div>
@@ -183,13 +150,24 @@ export default function LoginPage() {
                 </div>
                 <Input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-10 py-2 h-11 bg-[#F8FAFC] border-[#E2E8F0] rounded-lg focus:ring-[#0687C9] focus:border-[#0687C9]"
                   placeholder="Masukkan password anda"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+                >
+                  {showPassword ? (
+                    <BsEyeSlash className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+                  ) : (
+                    <BsEye className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+                  )}
+                </button>
               </div>
             </div>
 
@@ -209,13 +187,6 @@ export default function LoginPage() {
                   {remember && <BsCheck className="w-3 h-3 text-white" />}
                 </div>
                 <span className="ml-2 text-sm text-[#475569]">Ingat saya</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => router.push("/forgot-password")}
-                className="ml-auto text-sm text-[#0687C9] hover:text-[#0466a2] focus:outline-none"
-              >
-                Lupa Password?
               </button>
             </div>
 

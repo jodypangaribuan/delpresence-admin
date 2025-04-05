@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import DashboardLayout from "@/components/dashboard/dashboard-layout";
-import { isAuthenticated, isAdmin } from "@/lib/auth";
+import DashboardLayout from "@/layouts/dashboard/dashboard-layout";
+import { isAuthenticated, getUserRole } from "@/services/auth";
 
 export default function DashboardRootLayout({
   children,
@@ -11,13 +11,31 @@ export default function DashboardRootLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
+  const [authorized, setAuthorized] = useState(false);
 
-  // Protect route
+  // Protect route and handle role-based access
   useEffect(() => {
-    if (!isAuthenticated() || !isAdmin()) {
+    // Check if user is authenticated
+    if (!isAuthenticated()) {
+      router.push("/login");
+      return;
+    }
+
+    // Get current role
+    const userRole = getUserRole();
+
+    // Check if user has appropriate role to access the dashboard
+    if (userRole) {
+      setAuthorized(true);
+    } else {
       router.push("/login");
     }
   }, [router]);
+
+  // Show nothing while checking authentication
+  if (!authorized) {
+    return null;
+  }
 
   return <DashboardLayout>{children}</DashboardLayout>;
 }

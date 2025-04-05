@@ -6,7 +6,7 @@ import {
   Search,
   Calendar as CalendarIcon,
   HelpCircle,
-  User,
+  User as UserIcon,
   ChevronDown,
   LogOut,
   Settings,
@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState, useRef, memo } from "react";
 import { useRouter } from "next/navigation";
-import { logout, getUser } from "@/lib/auth";
+import { logout, getUser, CampusUser } from "@/services/auth";
 import {
   Dialog,
   DialogContent,
@@ -33,21 +33,8 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-
-// User interface that matches the structure from auth.ts
-interface User {
-  id: number;
-  user_id: number;
-  user: {
-    id: number;
-    first_name: string;
-    middle_name: string;
-    last_name: string;
-    email: string;
-    user_type: string;
-    verified: boolean;
-  };
-}
+import Link from "next/link";
+import { AccountSettingsModal } from "@/components/modals/AccountSettingsModal";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -209,11 +196,12 @@ const CalendarDisplay = memo(function CalendarDisplay() {
 
 // Memisahkan komponen ProfileMenu menjadi komponen terpisah untuk mencegah render ulang
 const ProfileMenu = memo(function ProfileMenu() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<CampusUser | null>(null);
   const [isUserLoading, setIsUserLoading] = useState(true);
   const [userLoaded, setUserLoaded] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -260,22 +248,16 @@ const ProfileMenu = memo(function ProfileMenu() {
     };
   }, [isMounted]);
 
-  // Get full name from user data
+  // Get full name from user
   const getFullName = () => {
-    if (!user) return "Admin BAAK";
-
-    const userData = user.user;
-    const names = [
-      userData.first_name || "",
-      userData.middle_name || "",
-      userData.last_name || "",
-    ];
-    return names.filter(Boolean).join(" ") || "Admin BAAK";
+    if (!user) return "User";
+    return user.username || "User";
   };
 
-  // Get email from user data
+  // Get email from user
   const getEmail = () => {
-    return user?.user?.email || "admin@del.ac.id";
+    if (!user) return "user@example.com";
+    return user.email || "user@example.com";
   };
 
   const handleLogoutClick = () => {
@@ -314,7 +296,7 @@ const ProfileMenu = memo(function ProfileMenu() {
             )}
           </div>
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E6F3FB] text-[#0687C9]">
-            <User className="h-5 w-5" />
+            <UserIcon className="h-5 w-5" />
           </div>
           <ChevronDown className="h-4 w-4 text-neutral-400 hidden md:block" />
         </button>
@@ -341,7 +323,7 @@ const ProfileMenu = memo(function ProfileMenu() {
                 className="px-4 py-2 text-sm text-neutral-700 hover:bg-[#E6F3FB] w-full text-left flex items-center"
                 onClick={() => {
                   setIsProfileMenuOpen(false);
-                  router.push("/dashboard/settings");
+                  setShowSettingsModal(true);
                 }}
               >
                 <Settings className="mr-2 h-4 w-4 text-neutral-500" />
@@ -358,6 +340,12 @@ const ProfileMenu = memo(function ProfileMenu() {
           </div>
         )}
       </div>
+
+      {/* Settings Modal */}
+      <AccountSettingsModal
+        open={showSettingsModal}
+        onOpenChange={setShowSettingsModal}
+      />
 
       {/* Logout Confirmation Dialog */}
       <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
@@ -461,18 +449,20 @@ export function Header({ onMenuClick }: HeaderProps) {
             <Menu className="h-5 w-5" />
           </button>
           <div className="hidden md:block">
-            <h2 className="text-lg font-medium text-[#002A5C]">
-              Selamat datang di DelPresence Management System
-            </h2>
-            <p className="text-sm text-neutral-500">
-              {currentTime ? (
-                <>
-                  {formattedDate} {formattedTime}
-                </>
-              ) : (
-                "Loading..."
-              )}
-            </p>
+            <Link href="/dashboard" className="group cursor-pointer">
+              <h2 className="text-lg font-medium text-[#002A5C] group-hover:text-primary transition-colors">
+                Selamat datang di DelPresence Management System
+              </h2>
+              <p className="text-sm text-neutral-500">
+                {currentTime ? (
+                  <>
+                    {formattedDate} {formattedTime}
+                  </>
+                ) : (
+                  "Loading..."
+                )}
+              </p>
+            </Link>
           </div>
         </div>
 

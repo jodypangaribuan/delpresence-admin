@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ClickSparkProvider from "@/components/ui/ClickSpark/ClickSparkProvider";
+import { ToastProvider } from "@/components/ui/use-toast";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,7 +33,9 @@ export default function RootLayout({
           } as React.CSSProperties
         }
       >
-        <ClickSparkProvider>{children}</ClickSparkProvider>
+        <ClickSparkProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </ClickSparkProvider>
       </body>
     </html>
   );

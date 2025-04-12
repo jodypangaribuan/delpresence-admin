@@ -3,433 +3,358 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import {
-  Users,
-  Book,
-  ClipboardCheck,
-  BarChart2,
-  ArrowUpRight,
+  Calendar,
   Clock,
-  MapPin,
-  FileText,
-  UserCheck,
   CheckCircle,
+  ClipboardCheck,
+  BarChart,
+  Users,
   QrCode,
   FileOutput,
-  BarChart,
-  PieChart,
-  Database,
-  CheckCheck,
-  BookOpen,
-  CalendarClock,
+  UserCog,
+  Microscope,
 } from "lucide-react";
 import Link from "next/link";
 
 export default function AssistantDashboard() {
   const [stats] = useState({
-    lecturers: 3,
-    totalStudents: 145,
-    attendanceToday: 91,
-    totalAttendance: 87,
-    pendingApprovals: 3,
+    totalClasses: 4,
+    upcomingClasses: 1,
+    totalStudents: 124,
+    attendanceRate: 89,
+    attendanceToday: 28,
+    completedPracticums: 6,
+    pendingPracticums: 2,
   });
+
+  const [practiceToday] = useState([
+    {
+      id: 1,
+      course: "Praktikum Algoritma dan Pemrograman",
+      time: "08:00 - 10:30",
+      room: "Lab Komputer 2",
+      studentCount: 32,
+      attendedCount: 28,
+    },
+    {
+      id: 2,
+      course: "Praktikum Basis Data",
+      time: "13:00 - 15:30",
+      room: "Lab Komputer 1",
+      studentCount: 30,
+      attendedCount: 0,
+      status: "upcoming",
+    },
+  ]);
+
+  const [schedule] = useState([
+    { day: "Senin", classes: 2 },
+    { day: "Selasa", classes: 0 },
+    { day: "Rabu", classes: 1 },
+    { day: "Kamis", classes: 1 },
+    { day: "Jumat", classes: 0 },
+  ]);
 
   return (
     <div className="space-y-8">
-      {/* Stats cards */}
-      <div>
-        <h2 className="text-xl font-bold text-gray-800 mb-4">
-          Statistik Kehadiran
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatCard
-            title="Dosen Dibantu"
-            value={stats.lecturers.toString()}
-            icon={<Book className="h-5 w-5 text-primary" />}
-            color="bg-primary/10"
-            textColor="text-primary"
-            trend="+1 dari bulan lalu"
-          />
-          <StatCard
-            title="Total Mahasiswa"
-            value={stats.totalStudents.toString()}
-            icon={<Users className="h-5 w-5 text-primary" />}
-            color="bg-primary/10"
-            textColor="text-primary"
-            trend="Di 7 kelas"
-          />
-          <StatCard
-            title="Presensi Hari Ini"
-            value={`${stats.attendanceToday}%`}
-            icon={<ClipboardCheck className="h-5 w-5 text-primary" />}
-            color="bg-primary/10"
-            textColor="text-primary"
-            trend="Meningkat 1%"
-          />
-          <StatCard
-            title="Rata-rata Kehadiran"
-            value={`${stats.totalAttendance}%`}
-            icon={<BarChart className="h-5 w-5 text-primary" />}
-            color="bg-primary/10"
-            textColor="text-primary"
-            trend="Semester ini"
-          />
-        </div>
-      </div>
-
-      {/* Task details for assistant */}
-      <div>
-        <h2 className="text-xl font-bold text-gray-800 mb-4">
-          Detail Tugas Asisten
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <StatCard
-            title="Sesi Lab Bulan Ini"
-            value="12"
-            icon={<Database className="h-5 w-5 text-primary" />}
-            color="bg-primary/10"
-            textColor="text-primary"
-            trend="Dari 4 mata kuliah"
-          />
-          <StatCard
-            title="Tugas Diperiksa"
-            value="35"
-            icon={<CheckCheck className="h-5 w-5 text-primary" />}
-            color="bg-primary/10"
-            textColor="text-primary"
-            trend="Minggu ini"
-          />
-          <StatCard
-            title="Sesi Konsultasi"
-            value="8"
-            icon={<BookOpen className="h-5 w-5 text-primary" />}
-            color="bg-primary/10"
-            textColor="text-primary"
-            trend="Minggu ini"
-          />
-        </div>
-      </div>
-
-      {/* Upcoming lab sessions */}
-      <div>
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold text-gray-800">Sesi Lab Hari Ini</h2>
-          <Link
-            href="/dashboard/schedules"
-            className="text-sm text-primary hover:text-primary/90 font-medium transition-colors flex items-center gap-1"
-          >
-            <span>Lihat Semua</span>
-            <ArrowUpRight className="h-4 w-4" />
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 gap-4">
-          <ClassCard
-            course="Praktikum Algoritma dan Pemrograman"
-            lecturer="Dr. Budi Santoso"
-            time="08:00 - 09:40"
-            room="Lab Komputer 1"
-            totalStudents={30}
-            presentStudents={27}
-            status="ongoing"
-          />
-          <ClassCard
-            course="Praktikum Basis Data"
-            lecturer="Dr. Ani Wijaya"
-            time="10:00 - 11:40"
-            room="Lab Komputer 2"
-            totalStudents={32}
-            presentStudents={0}
-            status="upcoming"
-          />
-          <ClassCard
-            course="Praktikum Pemrograman Berorientasi Objek"
-            lecturer="Dr. Citra Alam"
-            time="13:00 - 14:40"
-            room="Lab Komputer 3"
-            totalStudents={28}
-            presentStudents={0}
-            status="upcoming"
-          />
-        </div>
-      </div>
-
-      {/* Attendance Management Features */}
-      <div>
-        <h2 className="text-xl font-bold text-gray-800 mb-4">
-          Manajemen Kehadiran
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <FeatureCard
-            title="Generate QR Kelas"
-            description="Buat QR untuk presensi kelas"
-            icon={<QrCode className="h-5 w-5 text-primary" />}
-            href="/dashboard/qr-generate"
-            textColor="text-primary"
-          />
-          <FeatureCard
-            title="Jadwal Asisten"
-            description="Lihat jadwal tugas lab anda"
-            icon={<CalendarClock className="h-5 w-5 text-primary" />}
-            href="/dashboard/assistant-schedule"
-            textColor="text-primary"
-          />
-          <FeatureCard
-            title="Monitor Real-time"
-            description="Pantau kehadiran siswa secara real-time"
-            icon={<ClipboardCheck className="h-5 w-5 text-primary" />}
-            href="/dashboard/realtime-monitor"
-            textColor="text-primary"
-          />
-        </div>
-      </div>
-
-      {/* Lab Management Features - Specific for Assistants */}
-      <div>
-        <h2 className="text-xl font-bold text-gray-800 mb-4">
-          Manajemen Praktikum
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <FeatureCard
-            title="Materi Praktikum"
-            description="Kelola dokumen dan tugas praktikum"
-            icon={<FileText className="h-5 w-5 text-primary" />}
-            href="/dashboard/lab-materials"
-            textColor="text-primary"
-          />
-          <FeatureCard
-            title="Penilaian Praktikum"
-            description="Berikan nilai tugas lab mahasiswa"
-            icon={<BookOpen className="h-5 w-5 text-primary" />}
-            href="/dashboard/lab-grades"
-            textColor="text-primary"
-          />
-          <FeatureCard
-            title="Konsultasi"
-            description="Kelola jadwal konsultasi dengan mahasiswa"
-            icon={<Users className="h-5 w-5 text-primary" />}
-            href="/dashboard/consultation"
-            textColor="text-primary"
-          />
-        </div>
-      </div>
-
-      {/* Student Management Features */}
-      <div>
-        <h2 className="text-xl font-bold text-gray-800 mb-4">
-          Manajemen Mahasiswa
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <FeatureCard
-            title="Daftar Mahasiswa"
-            description="Kelola data mahasiswa kelas Anda"
-            icon={<Users className="h-5 w-5 text-primary" />}
-            href="/dashboard/student-list"
-            textColor="text-primary"
-          />
-          <FeatureCard
-            title="Verifikasi Perizinan"
-            description="Kelola dan verifikasi permintaan izin"
-            icon={<UserCheck className="h-5 w-5 text-primary" />}
-            href="/dashboard/leave-requests"
-            textColor="text-primary"
-          />
-          <FeatureCard
-            title="Tracking Perizinan"
-            description="Lacak status perizinan mahasiswa"
-            icon={<CheckCircle className="h-5 w-5 text-primary" />}
-            href="/dashboard/student-permissions"
-            textColor="text-primary"
-          />
-        </div>
-      </div>
-
-      {/* Reporting Features */}
-      <div>
-        <h2 className="text-xl font-bold text-gray-800 mb-4">
-          Laporan & Analisis
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <FeatureCard
-            title="Statistik Praktikum"
-            description="Lihat tren dan statistik kehadiran lab"
-            icon={<BarChart2 className="h-5 w-5 text-primary" />}
-            href="/dashboard/lab-stats"
-            textColor="text-primary"
-          />
-          <FeatureCard
-            title="Laporan untuk Dosen"
-            description="Siapkan laporan untuk dosen pengampu"
-            icon={<PieChart className="h-5 w-5 text-primary" />}
-            href="/dashboard/lecturer-reports"
-            textColor="text-primary"
-          />
-          <FeatureCard
-            title="Ekspor Data"
-            description="Ekspor data kehadiran praktikum"
-            icon={<FileOutput className="h-5 w-5 text-primary" />}
-            href="/dashboard/export-lab-data"
-            textColor="text-primary"
-          />
-        </div>
-      </div>
-
-      {/* Quick actions */}
-      <div>
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Aksi Cepat</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <ActionCard
-            title="Buka Presensi"
-            href="/dashboard/attendance/create"
-            color="bg-primary/10"
-            textColor="text-primary"
-          />
-          <ActionCard
-            title="Lihat Notifikasi"
-            href="/dashboard/notifications"
-            color="bg-primary/10"
-            textColor="text-primary"
-          />
-          <ActionCard
-            title="QR Presensi"
-            href="/dashboard/qr-generate"
-            color="bg-primary/10"
-            textColor="text-primary"
-          />
-          <ActionCard
-            title="Jadwal Tugas"
-            href="/dashboard/schedules"
-            color="bg-primary/10"
-            textColor="text-primary"
-          />
-        </div>
-      </div>
-
-      {/* Pending Tasks and Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div>
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
-            Persetujuan Menunggu
-          </h2>
-          <Card className="p-6 bg-white border border-gray-100 shadow-sm rounded-lg">
-            <div className="space-y-4">
-              {stats.pendingApprovals > 0 ? (
-                <>
-                  <ApprovalItem
-                    studentName="Andi Saputra"
-                    course="Praktikum Algoritma dan Pemrograman"
-                    date="Hari ini, 7 April 2025"
-                    reason="Sakit"
-                    type="illness"
-                  />
-                  <ApprovalItem
-                    studentName="Budi Santoso"
-                    course="Praktikum Basis Data"
-                    date="Kemarin, 6 April 2025"
-                    reason="Kegiatan Organisasi"
-                    type="activity"
-                  />
-                  <div className="pt-2">
-                    <Link
-                      href="/dashboard/leave-requests"
-                      className="text-sm text-primary hover:text-primary/90 font-medium transition-colors flex items-center gap-1"
-                    >
-                      <span>Lihat Semua Persetujuan</span>
-                      <ArrowUpRight className="h-4 w-4" />
-                    </Link>
-                  </div>
-                </>
-              ) : (
-                <div className="py-8 text-center">
-                  <CheckCircle className="h-10 w-10 mx-auto text-green-500 mb-2" />
-                  <h3 className="text-lg font-medium text-gray-800">
-                    Tidak Ada Persetujuan Pending
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    Semua persetujuan telah ditangani.
-                  </p>
-                </div>
-              )}
+      {/* Header Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card className="p-6 bg-white border-l-4 border-l-primary border border-gray-100 hover:shadow-sm transition-all rounded-lg">
+          <div className="flex flex-col">
+            <h3 className="text-sm font-medium text-gray-500">
+              Sesi Praktikum Hari Ini
+            </h3>
+            <div className="mt-2">
+              <span className="text-3xl font-bold text-gray-800">
+                {practiceToday.length}
+              </span>
+              <span className="ml-1 text-sm text-gray-500">sesi</span>
             </div>
-          </Card>
-        </div>
-
-        <div>
-          <h2 className="text-xl font-bold text-gray-800 mb-4">
-            Aktivitas Terkini
-          </h2>
-          <Card className="p-6 bg-white border border-gray-100 shadow-sm rounded-lg">
-            <div className="space-y-4">
-              <ActivityItem
-                action="QR Dibuat"
-                description="QR untuk Praktikum Algoritma dan Pemrograman"
-                time="15 menit yang lalu"
-                icon={<QrCode className="h-4 w-4 text-primary" />}
-              />
-              <ActivityItem
-                action="Presensi Dimulai"
-                description="Sesi presensi untuk Praktikum Basis Data dibuka"
-                time="1 jam yang lalu"
-                icon={<Clock className="h-4 w-4 text-green-500" />}
-              />
-              <ActivityItem
-                action="Izin Disetujui"
-                description="Persetujuan izin untuk Dewi Lestari"
-                time="2 jam yang lalu"
-                icon={<CheckCircle className="h-4 w-4 text-green-500" />}
-              />
-              <ActivityItem
-                action="Tugas Lab Diperiksa"
-                description="5 tugas lab Basis Data telah diperiksa"
-                time="3 jam yang lalu"
-                icon={<FileText className="h-4 w-4 text-primary" />}
-              />
-              <div className="pt-2">
-                <Link
-                  href="/dashboard/activity"
-                  className="text-sm text-primary hover:text-primary/90 font-medium transition-colors flex items-center gap-1"
-                >
-                  <span>Lihat Semua Aktivitas</span>
-                  <ArrowUpRight className="h-4 w-4" />
-                </Link>
+            <div className="mt-3 flex items-center space-x-2">
+              <div className="text-xs font-medium text-green-600">
+                {practiceToday.filter((l) => l.status !== "upcoming").length}{" "}
+                selesai
+              </div>
+              <span className="text-gray-300">•</span>
+              <div className="text-xs font-medium text-blue-600">
+                {practiceToday.filter((l) => l.status === "upcoming").length}{" "}
+                akan datang
               </div>
             </div>
-          </Card>
+          </div>
+        </Card>
+
+        <Card className="p-6 bg-white border-l-4 border-l-primary border border-gray-100 hover:shadow-sm transition-all rounded-lg">
+          <div className="flex flex-col">
+            <h3 className="text-sm font-medium text-gray-500">
+              Tingkat Kehadiran Praktikan
+            </h3>
+            <div className="mt-2">
+              <span className="text-3xl font-bold text-gray-800">
+                {stats.attendanceRate}%
+              </span>
+            </div>
+            <div className="mt-3 flex items-center">
+              <div className="text-xs font-medium text-green-600">
+                {stats.attendanceToday} mahasiswa hadir hari ini
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-6 bg-white border-l-4 border-l-primary border border-gray-100 hover:shadow-sm transition-all rounded-lg">
+          <div className="flex flex-col">
+            <h3 className="text-sm font-medium text-gray-500">
+              Total Praktikan
+            </h3>
+            <div className="mt-2">
+              <span className="text-3xl font-bold text-gray-800">
+                {stats.totalStudents}
+              </span>
+              <span className="ml-1 text-sm text-gray-500">orang</span>
+            </div>
+            <div className="mt-3 flex items-center">
+              <div className="text-xs font-medium text-blue-600">
+                {stats.totalClasses} kelas
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      {/* Practicum Today */}
+      <div>
+        <h2 className="text-xl font-bold text-gray-800 mb-4">
+          Jadwal Praktikum Hari Ini
+        </h2>
+        <div className="grid grid-cols-1 gap-4">
+          {practiceToday.map((practice) => (
+            <Card
+              key={practice.id}
+              className={`p-4 bg-white border ${
+                practice.status === "upcoming"
+                  ? "border-blue-200"
+                  : "border-green-200"
+              } hover:shadow-md transition-all rounded-lg`}
+            >
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                <div className="flex items-start space-x-3">
+                  <div
+                    className={`p-2 rounded-full ${
+                      practice.status === "upcoming"
+                        ? "bg-blue-100"
+                        : "bg-green-100"
+                    }`}
+                  >
+                    {practice.status === "upcoming" ? (
+                      <Clock className="h-6 w-6 text-blue-600" />
+                    ) : (
+                      <CheckCircle className="h-6 w-6 text-green-600" />
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-900">
+                      {practice.course}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      {practice.time} • {practice.room}
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-3 md:mt-0 flex flex-col md:flex-row md:items-center gap-3">
+                  <div className="text-sm text-gray-600">
+                    <span className="font-medium">
+                      {practice.attendedCount}
+                    </span>
+                    /{practice.studentCount} hadir
+                  </div>
+                  {practice.status === "upcoming" ? (
+                    <Link
+                      href={`/dashboard/assistant/attendance/${practice.id}`}
+                      className="px-3 py-1.5 bg-primary text-white text-sm rounded-md font-medium hover:bg-primary/90 transition-colors"
+                    >
+                      Mulai Praktikum
+                    </Link>
+                  ) : (
+                    <Link
+                      href={`/dashboard/assistant/attendance/${practice.id}`}
+                      className="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm rounded-md font-medium hover:bg-gray-200 transition-colors"
+                    >
+                      Detail
+                    </Link>
+                  )}
+                </div>
+              </div>
+            </Card>
+          ))}
         </div>
+      </div>
+
+      {/* Weekly Schedule */}
+      <div>
+        <h2 className="text-xl font-bold text-gray-800 mb-4">
+          Jadwal Mingguan
+        </h2>
+        <Card className="p-6 bg-white border border-gray-100 rounded-lg">
+          <div className="grid grid-cols-5 gap-4">
+            {schedule.map((day) => (
+              <div
+                key={day.day}
+                className="flex flex-col items-center p-4 rounded-lg bg-gray-50"
+              >
+                <p className="font-medium text-gray-700">{day.day}</p>
+                <div className="mt-2 h-20 w-full flex items-center justify-center">
+                  {day.classes > 0 ? (
+                    <div className="text-center">
+                      <p className="text-2xl font-bold text-primary">
+                        {day.classes}
+                      </p>
+                      <p className="text-xs text-gray-500">praktikum</p>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-400">Tidak ada praktikum</p>
+                  )}
+                </div>
+                {day.classes > 0 && (
+                  <Link
+                    href={`/dashboard/assistant/schedules?day=${day.day}`}
+                    className="mt-2 text-xs text-primary font-medium hover:underline"
+                  >
+                    Lihat Detail
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+
+      {/* Progress Overview */}
+      <div>
+        <h2 className="text-xl font-bold text-gray-800 mb-4">
+          Progress Praktikum
+        </h2>
+        <Card className="p-6 bg-white border border-gray-100 rounded-lg">
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between mb-1">
+                <span className="text-sm font-medium text-gray-700">
+                  Praktikum Selesai
+                </span>
+                <span className="text-sm font-medium text-gray-700">
+                  {stats.completedPracticums}/
+                  {stats.completedPracticums + stats.pendingPracticums}
+                </span>
+              </div>
+              <div className="w-full h-2 bg-gray-200 rounded-full">
+                <div
+                  className="h-2 bg-primary rounded-full"
+                  style={{
+                    width: `${
+                      (stats.completedPracticums /
+                        (stats.completedPracticums + stats.pendingPracticums)) *
+                      100
+                    }%`,
+                  }}
+                ></div>
+              </div>
+              <p className="mt-1 text-xs text-gray-500">
+                {stats.pendingPracticums} praktikum belum selesai
+              </p>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      {/* Menu Utama Asisten Dosen */}
+      <div>
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Menu Asisten</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <FeatureCard
+            title="Jadwal Asistensi"
+            description="Lihat jadwal praktikum semester ini"
+            icon={<Calendar className="h-5 w-5 text-primary" />}
+            href="/dashboard/assistant/schedules"
+            textColor="text-primary"
+          />
+          <FeatureCard
+            title="Kehadiran Praktikum"
+            description="Kelola kehadiran mahasiswa praktikum"
+            icon={<ClipboardCheck className="h-5 w-5 text-primary" />}
+            href="/dashboard/assistant/attendance"
+            textColor="text-primary"
+          />
+          <FeatureCard
+            title="Rekap Kehadiran"
+            description="Monitoring kehadiran praktikum"
+            icon={<BarChart className="h-5 w-5 text-primary" />}
+            href="/dashboard/assistant/attendance-summary"
+            textColor="text-primary"
+          />
+          <FeatureCard
+            title="Kolaborasi Dosen"
+            description="Akses absensi bersama dosen utama"
+            icon={<Users className="h-5 w-5 text-primary" />}
+            href="/dashboard/assistant/collaboration"
+            textColor="text-primary"
+          />
+        </div>
+      </div>
+
+      {/* Tools Tambahan */}
+      <div>
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Tools Tambahan</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <FeatureCard
+            title="Generate QR Code"
+            description="Buat QR Code untuk absensi praktikum"
+            icon={<QrCode className="h-5 w-5 text-primary" />}
+            href="/dashboard/assistant/qr-generate"
+            textColor="text-primary"
+          />
+          <FeatureCard
+            title="Export Kehadiran"
+            description="Unduh data kehadiran praktikan"
+            icon={<FileOutput className="h-5 w-5 text-primary" />}
+            href="/dashboard/assistant/export"
+            textColor="text-primary"
+          />
+        </div>
+      </div>
+
+      {/* Notifications */}
+      <div>
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Pemberitahuan</h2>
+        <Card className="p-6 bg-white border border-gray-100 rounded-lg">
+          <div className="space-y-4">
+            <NotificationItem
+              title="Koordinasi dengan Dosen"
+              description="Dosen pengampu meminta diskusi terkait materi praktikum minggu depan"
+              time="15 menit yang lalu"
+              icon={<UserCog className="h-5 w-5 text-primary" />}
+              href="/dashboard/assistant/collaboration"
+            />
+            <NotificationItem
+              title="Perubahan Jadwal"
+              description="Jadwal praktikum Basis Data hari Rabu dipindah ke Lab Komputer 4"
+              time="1 jam yang lalu"
+              icon={<Calendar className="h-5 w-5 text-primary" />}
+              href="/dashboard/assistant/schedules"
+            />
+            <NotificationItem
+              title="Modul Baru"
+              description="Modul praktikum untuk minggu ke-8 telah ditambahkan"
+              time="3 jam yang lalu"
+              icon={<Microscope className="h-5 w-5 text-primary" />}
+              href="/dashboard/assistant/modules"
+            />
+          </div>
+        </Card>
       </div>
     </div>
   );
 }
 
-// Stats Card Component
-function StatCard({
-  title,
-  value,
-  icon,
-  color,
-  textColor,
-  trend,
-}: {
-  title: string;
-  value: string;
-  icon: React.ReactNode;
-  color: string;
-  textColor: string;
-  trend: string;
-}) {
-  return (
-    <Card className="p-6 bg-white border border-gray-100 hover:shadow-md transition-all h-full rounded-lg">
-      <div className="flex items-center gap-4">
-        <div className={`p-3 rounded-lg ${color}`}>{icon}</div>
-        <div>
-          <p className="text-2xl font-bold text-gray-800">{value}</p>
-          <p className={`text-sm font-medium ${textColor}`}>{title}</p>
-          <p className="text-xs text-gray-500 mt-1">{trend}</p>
-        </div>
-      </div>
-    </Card>
-  );
-}
-
-// Feature Card Component
 function FeatureCard({
   title,
   description,
@@ -445,282 +370,46 @@ function FeatureCard({
 }) {
   return (
     <Link href={href}>
-      <Card className="border border-gray-100 hover:shadow-md transition-all h-full overflow-hidden rounded-lg">
-        <div className={`bg-primary p-4`}>
-          <div className="flex justify-between items-center">
-            <div className="bg-white/80 p-2 rounded-lg">{icon}</div>
-            <ArrowUpRight className="h-5 w-5 text-white" />
+      <Card className="p-6 bg-white border border-gray-100 hover:shadow-md transition-all h-full rounded-lg">
+        <div className="flex flex-col h-full">
+          <div className="flex items-start">
+            <div className="p-2 rounded-full bg-primary/10">{icon}</div>
           </div>
-        </div>
-        <div className="p-4">
-          <h3 className={`text-lg font-semibold ${textColor}`}>{title}</h3>
-          <p className="text-sm text-gray-600 mt-1">{description}</p>
+          <div className="mt-2">
+            <h3 className={`text-base font-semibold ${textColor}`}>{title}</h3>
+            <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+              {description}
+            </p>
+          </div>
         </div>
       </Card>
     </Link>
   );
 }
 
-// Class Card Component
-function ClassCard({
-  course,
-  lecturer,
-  time,
-  room,
-  totalStudents,
-  presentStudents,
-  status,
-}: {
-  course: string;
-  lecturer: string;
-  time: string;
-  room: string;
-  totalStudents: number;
-  presentStudents: number;
-  status: "upcoming" | "ongoing" | "completed";
-}) {
-  const getStatusColor = () => {
-    if (status === "ongoing") return "bg-green-100 text-green-800";
-    if (status === "upcoming") return "bg-blue-100 text-blue-800";
-    return "bg-gray-100 text-gray-800";
-  };
-
-  const getStatusText = () => {
-    if (status === "ongoing") return "Sedang Berlangsung";
-    if (status === "upcoming") return "Akan Datang";
-    return "Selesai";
-  };
-
-  return (
-    <Card className="p-4 bg-white border border-gray-100 shadow-sm rounded-lg">
-      <div className="flex items-start justify-between">
-        <div className="space-y-1">
-          <h3 className="font-bold text-gray-800">{course}</h3>
-          <p className="text-sm text-gray-600">Dosen: {lecturer}</p>
-          <div className="flex items-center text-gray-500 space-x-3 text-sm">
-            <div className="flex items-center">
-              <Clock className="h-4 w-4 mr-1" />
-              <span>{time}</span>
-            </div>
-            <div className="flex items-center">
-              <MapPin className="h-4 w-4 mr-1" />
-              <span>{room}</span>
-            </div>
-          </div>
-        </div>
-        <div
-          className={`px-2 py-1 rounded-md text-xs font-medium ${getStatusColor()}`}
-        >
-          {getStatusText()}
-        </div>
-      </div>
-
-      <div className="mt-4">
-        <div className="flex justify-between items-center mb-1">
-          <div className="text-xs text-gray-500">
-            {status === "ongoing"
-              ? `${presentStudents} dari ${totalStudents} mahasiswa hadir`
-              : `${totalStudents} mahasiswa terdaftar`}
-          </div>
-          <div className="text-xs font-medium text-primary">
-            {status === "ongoing"
-              ? `${Math.round((presentStudents / totalStudents) * 100)}%`
-              : "-"}
-          </div>
-        </div>
-        {status === "ongoing" && (
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div
-              className="bg-primary h-2 rounded-full"
-              style={{
-                width: `${Math.round(
-                  (presentStudents / totalStudents) * 100
-                )}%`,
-              }}
-            ></div>
-          </div>
-        )}
-      </div>
-
-      <div className="mt-4 flex space-x-2">
-        {status === "upcoming" && (
-          <>
-            <Link
-              href={`/dashboard/qr-generate?course=${encodeURIComponent(
-                course
-              )}`}
-              className="flex-1 py-2 px-3 bg-primary text-white text-xs font-medium rounded-md flex justify-center items-center"
-            >
-              <QrCode className="h-3 w-3 mr-1" />
-              Generate QR
-            </Link>
-            <Link
-              href={`/dashboard/student-list?course=${encodeURIComponent(
-                course
-              )}`}
-              className="flex-1 py-2 px-3 bg-gray-100 text-gray-800 text-xs font-medium rounded-md flex justify-center items-center"
-            >
-              <Users className="h-3 w-3 mr-1" />
-              Lihat Mahasiswa
-            </Link>
-          </>
-        )}
-        {status === "ongoing" && (
-          <>
-            <Link
-              href={`/dashboard/realtime-monitor?course=${encodeURIComponent(
-                course
-              )}`}
-              className="flex-1 py-2 px-3 bg-primary text-white text-xs font-medium rounded-md flex justify-center items-center"
-            >
-              <BarChart className="h-3 w-3 mr-1" />
-              Monitor Kehadiran
-            </Link>
-            <Link
-              href={`/dashboard/student-list?course=${encodeURIComponent(
-                course
-              )}`}
-              className="flex-1 py-2 px-3 bg-gray-100 text-gray-800 text-xs font-medium rounded-md flex justify-center items-center"
-            >
-              <Users className="h-3 w-3 mr-1" />
-              Lihat Mahasiswa
-            </Link>
-          </>
-        )}
-        {status === "completed" && (
-          <>
-            <Link
-              href={`/dashboard/attendance-summary?course=${encodeURIComponent(
-                course
-              )}`}
-              className="flex-1 py-2 px-3 bg-primary text-white text-xs font-medium rounded-md flex justify-center items-center"
-            >
-              <BarChart className="h-3 w-3 mr-1" />
-              Ringkasan Kehadiran
-            </Link>
-            <Link
-              href={`/dashboard/export-attendance?course=${encodeURIComponent(
-                course
-              )}`}
-              className="flex-1 py-2 px-3 bg-gray-100 text-gray-800 text-xs font-medium rounded-md flex justify-center items-center"
-            >
-              <FileOutput className="h-3 w-3 mr-1" />
-              Ekspor Data
-            </Link>
-          </>
-        )}
-      </div>
-    </Card>
-  );
-}
-
-// Action Card Component
-function ActionCard({
+function NotificationItem({
   title,
-  href,
-  color,
-  textColor,
-}: {
-  title: string;
-  href: string;
-  color: string;
-  textColor: string;
-}) {
-  return (
-    <Link href={href}>
-      <div
-        className={`${color} ${textColor} p-4 rounded-lg text-center hover:shadow-sm transition-all border border-gray-100`}
-      >
-        <p className="font-medium">{title}</p>
-      </div>
-    </Link>
-  );
-}
-
-// Approval Item Component
-function ApprovalItem({
-  studentName,
-  course,
-  date,
-  reason,
-  type,
-}: {
-  studentName: string;
-  course: string;
-  date: string;
-  reason: string;
-  type: "illness" | "activity" | "family" | "other";
-}) {
-  const getReasonIcon = () => {
-    switch (type) {
-      case "illness":
-        return (
-          <div className="p-2 bg-red-100 rounded-full text-red-600">🏥</div>
-        );
-      case "activity":
-        return (
-          <div className="p-2 bg-blue-100 rounded-full text-blue-600">🎭</div>
-        );
-      case "family":
-        return (
-          <div className="p-2 bg-yellow-100 rounded-full text-yellow-600">
-            👪
-          </div>
-        );
-      default:
-        return (
-          <div className="p-2 bg-gray-100 rounded-full text-gray-600">📝</div>
-        );
-    }
-  };
-
-  return (
-    <div className="flex items-start space-x-3">
-      {getReasonIcon()}
-      <div className="flex-1">
-        <div className="flex items-center justify-between">
-          <h4 className="text-sm font-medium text-gray-800">{studentName}</h4>
-          <div className="ml-2">
-            <div className="flex space-x-2">
-              <button className="p-1 text-green-600 hover:text-green-700 transition-colors">
-                <CheckCircle className="h-4 w-4" />
-              </button>
-              <button className="p-1 text-red-600 hover:text-red-700 transition-colors">
-                ❌
-              </button>
-            </div>
-          </div>
-        </div>
-        <p className="text-xs text-gray-600">{course}</p>
-        <p className="text-xs text-gray-500 mt-1">
-          <span className="font-medium">Alasan:</span> {reason}
-        </p>
-        <p className="text-xs text-gray-400 mt-1">{date}</p>
-      </div>
-    </div>
-  );
-}
-
-// Activity Item Component
-function ActivityItem({
-  action,
   description,
   time,
   icon,
+  href,
 }: {
-  action: string;
+  title: string;
   description: string;
   time: string;
   icon: React.ReactNode;
+  href: string;
 }) {
   return (
-    <div className="flex items-start space-x-3">
-      <div className="p-2 bg-gray-100 rounded-full">{icon}</div>
-      <div>
-        <h4 className="text-sm font-medium text-gray-800">{action}</h4>
-        <p className="text-xs text-gray-600">{description}</p>
-        <p className="text-xs text-gray-400 mt-1">{time}</p>
+    <Link href={href}>
+      <div className="flex items-start space-x-4 hover:bg-gray-50 p-3 rounded-lg transition-colors">
+        <div className="p-2 rounded-full bg-gray-100">{icon}</div>
+        <div className="flex-1">
+          <h4 className="font-medium text-gray-800">{title}</h4>
+          <p className="text-sm text-gray-600 mt-0.5">{description}</p>
+          <p className="text-xs text-gray-400 mt-1">{time}</p>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }

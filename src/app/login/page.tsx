@@ -43,6 +43,29 @@ export default function LoginPage() {
       // Login with campus API
       const response = await login(username, password);
 
+      // Debug: Log auth response (without sensitive info)
+      console.log("Auth response:", {
+        result: response.result,
+        userRole: response.user?.role,
+        hasToken: !!response.token,
+        tokenLength: response.token?.length || 0,
+      });
+
+      // For admin users, verify we have a campus token
+      if (response.result && response.user?.role === UserRole.ADMIN) {
+        try {
+          // Save campus token for admins (needed for API integrations)
+          if (response.token) {
+            document.cookie = `campus_token=${response.token}; path=/; max-age=86400; SameSite=Strict`;
+            console.log("Saved campus token for admin from login");
+          } else {
+            console.error("No campus token received for admin user");
+          }
+        } catch (err) {
+          console.error("Failed to save campus token:", err);
+        }
+      }
+
       // Check user role and redirect to dashboard
       if (response.result && response.user) {
         if (

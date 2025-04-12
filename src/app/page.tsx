@@ -85,16 +85,16 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="md:w-1/2 lg:w-1/2 xl:w-3/5 hidden md:block">
-                  <div className="relative max-w-[600px] mx-auto">
+                  <div className="relative max-w-[650px] mx-auto">
                     <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-[#0687C9]/10 to-[#00A3FF]/10 opacity-80 blur-xl"></div>
-                    <div className="relative rounded-2xl overflow-visible flex items-center justify-center p-8 lg:p-10">
+                    <div className="relative rounded-2xl overflow-visible flex items-center justify-center py-10 px-6 lg:p-10">
                       {/* Image Stack from ReactBits - Only render on client to avoid hydration issues */}
                       {isClient && (
                         <Stack
                           randomRotation={false}
                           cardDimensions={{
-                            width: Math.min(450, window.innerWidth * 0.8),
-                            height: Math.min(300, window.innerWidth * 0.5),
+                            width: Math.min(500, window.innerWidth * 0.9),
+                            height: Math.min(350, window.innerWidth * 0.6),
                           }}
                           sensitivity={60}
                           sendToBackOnClick={true}

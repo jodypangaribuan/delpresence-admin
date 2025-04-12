@@ -2,29 +2,55 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { BsArrowLeft, BsChevronDown, BsChevronUp } from "react-icons/bs";
+import {
+  BsArrowLeft,
+  BsChevronDown,
+  BsChevronUp,
+  BsShieldLock,
+} from "react-icons/bs";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function PrivacyPolicyPage() {
-  const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [activeSection, setActiveSection] = useState<string | null>(
+    "info-collected"
+  );
 
   // Data untuk kebijakan privasi
   const sections = [
     {
       id: "info-collected",
       title: "Informasi yang Kami Kumpulkan",
+      icon: <BsShieldLock className="text-primary/70" />,
       content: (
         <>
-          <p>
+          <p className="text-slate-600 mb-3">
             DelPresence mengumpulkan informasi yang diperlukan untuk menjalankan
             sistem manajemen kehadiran digital, termasuk:
           </p>
-          <ul>
-            <li>Informasi identitas seperti nama, NIM/NIP, dan email</li>
-            <li>Data fakultas dan program studi untuk mahasiswa</li>
-            <li>Data jabatan untuk dosen</li>
-            <li>Data kehadiran seperti waktu, tanggal, dan lokasi presensi</li>
-            <li>Informasi perangkat dan log aktivitas sistem</li>
+          <ul className="space-y-2 text-slate-600">
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>Informasi identitas seperti nama, NIM/NIP, dan email</span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>Data fakultas dan program studi untuk mahasiswa</span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>Data jabatan untuk dosen</span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>
+                Data kehadiran seperti waktu, tanggal, dan lokasi presensi
+              </span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>Informasi perangkat dan log aktivitas sistem</span>
+            </li>
           </ul>
         </>
       ),
@@ -32,15 +58,35 @@ export default function PrivacyPolicyPage() {
     {
       id: "info-usage",
       title: "Penggunaan Informasi",
+      icon: <BsShieldLock className="text-primary/70" />,
       content: (
         <>
-          <p>Informasi yang dikumpulkan digunakan untuk:</p>
-          <ul>
-            <li>Mengelola dan memverifikasi kehadiran perkuliahan</li>
-            <li>Membuat dan menampilkan laporan kehadiran</li>
-            <li>Mengirimkan notifikasi terkait kehadiran dan perkuliahan</li>
-            <li>Memelihara dan meningkatkan layanan DelPresence</li>
-            <li>Melindungi keamanan dan integritas sistem</li>
+          <p className="text-slate-600 mb-3">
+            Informasi yang dikumpulkan digunakan untuk:
+          </p>
+          <ul className="space-y-2 text-slate-600">
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>Mengelola dan memverifikasi kehadiran perkuliahan</span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>Membuat dan menampilkan laporan kehadiran</span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>
+                Mengirimkan notifikasi terkait kehadiran dan perkuliahan
+              </span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>Memelihara dan meningkatkan layanan DelPresence</span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>Melindungi keamanan dan integritas sistem</span>
+            </li>
           </ul>
         </>
       ),
@@ -48,19 +94,34 @@ export default function PrivacyPolicyPage() {
     {
       id: "data-protection",
       title: "Perlindungan Data",
+      icon: <BsShieldLock className="text-primary/70" />,
       content: (
         <>
-          <p>
+          <p className="text-slate-600 mb-3">
             DelPresence berkomitmen untuk melindungi data pribadi Anda dengan:
           </p>
-          <ul>
-            <li>Mengimplementasikan praktik keamanan data yang ketat</li>
-            <li>
-              Membatasi akses ke informasi pribadi hanya kepada personel yang
-              berwenang
+          <ul className="space-y-2 text-slate-600">
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>Mengimplementasikan praktik keamanan data yang ketat</span>
             </li>
-            <li>Menggunakan enkripsi untuk data sensitif</li>
-            <li>Secara teratur meninjau dan meningkatkan praktik keamanan</li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>
+                Membatasi akses ke informasi pribadi hanya kepada personel yang
+                berwenang
+              </span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>Menggunakan enkripsi untuk data sensitif</span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>
+                Secara teratur meninjau dan meningkatkan praktik keamanan
+              </span>
+            </li>
           </ul>
         </>
       ),
@@ -68,19 +129,33 @@ export default function PrivacyPolicyPage() {
     {
       id: "info-sharing",
       title: "Pembagian Informasi",
+      icon: <BsShieldLock className="text-primary/70" />,
       content: (
         <>
-          <p>
+          <p className="text-slate-600 mb-3">
             DelPresence tidak akan menjual, memperdagangkan, atau menyewakan
             informasi pribadi pengguna. Informasi pribadi hanya dibagikan dalam
             lingkungan akademik Institut Teknologi Del dengan:
           </p>
-          <ul>
-            <li>Dosen pengampu mata kuliah terkait data kehadiran mahasiswa</li>
-            <li>
-              Staf IT Del yang memerlukan akses untuk tujuan administratif
+          <ul className="space-y-2 text-slate-600">
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>
+                Dosen pengampu mata kuliah terkait data kehadiran mahasiswa
+              </span>
             </li>
-            <li>Departemen akademik untuk tujuan pengarsipan dan evaluasi</li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>
+                Staf IT Del yang memerlukan akses untuk tujuan administratif
+              </span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>
+                Departemen akademik untuk tujuan pengarsipan dan evaluasi
+              </span>
+            </li>
           </ul>
         </>
       ),
@@ -88,8 +163,9 @@ export default function PrivacyPolicyPage() {
     {
       id: "data-retention",
       title: "Penyimpanan dan Retensi Data",
+      icon: <BsShieldLock className="text-primary/70" />,
       content: (
-        <p>
+        <p className="text-slate-600">
           Data kehadiran akan disimpan selama periode yang diperlukan untuk
           tujuan akademik dan administratif IT Del, biasanya selama masa studi
           atau masa kerja pengguna di institusi ditambah periode tambahan yang
@@ -100,14 +176,33 @@ export default function PrivacyPolicyPage() {
     {
       id: "user-rights",
       title: "Hak Pengguna",
+      icon: <BsShieldLock className="text-primary/70" />,
       content: (
         <>
-          <p>Sebagai pengguna DelPresence, Anda memiliki hak untuk:</p>
-          <ul>
-            <li>Mengakses data personal Anda yang tersimpan dalam sistem</li>
-            <li>Meminta koreksi data yang tidak akurat</li>
-            <li>Menerima notifikasi tentang penggunaan data Anda</li>
-            <li>Mengajukan pertanyaan atau keluhan terkait privasi data</li>
+          <p className="text-slate-600 mb-3">
+            Sebagai pengguna DelPresence, Anda memiliki hak untuk:
+          </p>
+          <ul className="space-y-2 text-slate-600">
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>
+                Mengakses data personal Anda yang tersimpan dalam sistem
+              </span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>Meminta koreksi data yang tidak akurat</span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>Menerima notifikasi tentang penggunaan data Anda</span>
+            </li>
+            <li className="flex items-start">
+              <span className="inline-block w-2 h-2 rounded-full bg-primary/70 mt-2 mr-2"></span>
+              <span>
+                Mengajukan pertanyaan atau keluhan terkait privasi data
+              </span>
+            </li>
           </ul>
         </>
       ),
@@ -115,8 +210,9 @@ export default function PrivacyPolicyPage() {
     {
       id: "policy-updates",
       title: "Pembaruan Kebijakan Privasi",
+      icon: <BsShieldLock className="text-primary/70" />,
       content: (
-        <p>
+        <p className="text-slate-600">
           Kebijakan privasi ini dapat diperbarui dari waktu ke waktu untuk
           mencerminkan praktik terbaik dan kepatuhan terhadap regulasi.
           Perubahan signifikan akan diberitahukan melalui sistem DelPresence
@@ -127,15 +223,16 @@ export default function PrivacyPolicyPage() {
     {
       id: "contact",
       title: "Kontak",
+      icon: <BsShieldLock className="text-primary/70" />,
       content: (
         <>
-          <p>
+          <p className="text-slate-600 mb-3">
             Jika Anda memiliki pertanyaan atau kekhawatiran tentang kebijakan
             privasi, silakan hubungi:
           </p>
           <a
             href="mailto:support@delpresence.del.ac.id"
-            className="mt-2 inline-flex items-center text-[#0687C9] font-medium hover:underline"
+            className="mt-2 inline-flex items-center text-primary font-medium hover:underline"
           >
             support@delpresence.del.ac.id
           </a>
@@ -155,126 +252,122 @@ export default function PrivacyPolicyPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Header yang simpel dan tetap terlihat */}
-      <header className="sticky top-0 z-10 bg-white shadow-sm">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-4">
+      {/* Header yang modern dan tetap terlihat */}
+      <header className="sticky top-0 z-10 bg-white shadow-sm border-b border-slate-200/80">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-4">
           <Link
             href="/"
-            className="flex items-center text-[#0687C9] hover:text-[#0568a0] transition-colors"
+            className="flex items-center text-primary hover:text-primary-dark transition-colors"
           >
             <BsArrowLeft className="text-lg mr-2" />
-            <span>Kembali</span>
+            <span className="font-medium">Kembali</span>
           </Link>
-          <Image
-            src="/images/logo2.png"
-            alt="DelPresence Logo"
-            width={100}
-            height={30}
-            className="h-8 w-auto object-contain"
-          />
+          <div className="flex items-center">
+            <Image
+              src="/images/logo2.png"
+              alt="DelPresence Logo"
+              width={120}
+              height={36}
+              className="h-8 w-auto object-contain"
+            />
+          </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-          {/* Header kebijakan */}
-          <div className="px-6 py-8 border-b border-slate-100">
-            <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        {/* Hero banner */}
+        <div className="bg-gradient-to-r from-primary-light to-white rounded-xl shadow-sm overflow-hidden mb-8">
+          <div className="px-6 py-10 sm:px-10">
+            <h1 className="text-3xl sm:text-4xl font-bold text-primary-dark mb-3">
               Kebijakan Privasi
             </h1>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-500 mb-4">
               Terakhir diperbarui: 1 Maret 2023
             </p>
-            <p className="mt-4 text-slate-600">
+            <p className="max-w-3xl text-slate-600">
               Kebijakan privasi ini menjelaskan bagaimana DelPresence
               mengumpulkan, menggunakan, dan melindungi informasi pribadi Anda.
             </p>
           </div>
+        </div>
 
-          {/* Akordion yang diimprovisasi */}
-          <div className="divide-y divide-slate-100">
+        {/* Daftar isi - TOC */}
+        <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+          <h2 className="text-xl font-semibold text-slate-800 mb-4">
+            Daftar Isi
+          </h2>
+          <nav className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {sections.map((section) => (
-              <div key={section.id} className="overflow-hidden">
-                <button
-                  onClick={() => toggleSection(section.id)}
-                  className="w-full flex items-center justify-between p-6 text-left hover:bg-slate-50 transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#0687C9]"
-                >
+              <a
+                key={section.id}
+                href={`#${section.id}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActiveSection(section.id);
+                  const element = document.getElementById(section.id);
+                  if (element) {
+                    element.scrollIntoView({ behavior: "smooth" });
+                  }
+                }}
+                className={`px-3 py-2 rounded-lg text-sm flex items-center ${
+                  activeSection === section.id
+                    ? "bg-primary-light text-primary font-medium"
+                    : "text-slate-600 hover:bg-slate-50"
+                }`}
+              >
+                <span className="mr-2">{section.icon}</span>
+                {section.title}
+              </a>
+            ))}
+          </nav>
+        </div>
+
+        {/* Akordion yang diimprovisasi dengan animasi */}
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden divide-y divide-slate-100">
+          {sections.map((section) => (
+            <div key={section.id} id={section.id} className="overflow-hidden">
+              <button
+                onClick={() => toggleSection(section.id)}
+                className="w-full flex items-center justify-between p-6 text-left hover:bg-slate-50 transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+              >
+                <div className="flex items-center">
+                  <span className="mr-3 text-lg">{section.icon}</span>
                   <span className="font-medium text-slate-800">
                     {section.title}
                   </span>
-                  <span className="ml-6 flex-shrink-0 text-[#0687C9]">
-                    {activeSection === section.id ? (
-                      <BsChevronUp />
-                    ) : (
-                      <BsChevronDown />
-                    )}
-                  </span>
-                </button>
-
-                <div
-                  className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                    activeSection === section.id
-                      ? "max-h-[1000px] opacity-100"
-                      : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <div className="px-6 pb-6 pt-2 bg-white">
-                    <div className="prose prose-sm lg:prose-base prose-slate max-w-none prose-ul:pl-5 prose-li:marker:text-[#0687C9]">
-                      {section.content}
-                    </div>
-                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+                <div>
+                  {activeSection === section.id ? (
+                    <BsChevronUp className="text-primary text-lg" />
+                  ) : (
+                    <BsChevronDown className="text-slate-400 text-lg" />
+                  )}
+                </div>
+              </button>
+              <AnimatePresence>
+                {activeSection === section.id && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-6 pb-6 pt-1">{section.content}</div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
         </div>
 
-        {/* Tombol navigasi */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-between mt-8">
-          <Link
-            href="/terms-of-use"
-            className="inline-flex justify-center items-center py-3 px-6 rounded-lg text-[#0687C9] border border-[#0687C9] bg-white hover:bg-[#f0f9ff] transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0687C9]"
-          >
-            <span>Lihat Ketentuan Penggunaan</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 ml-2"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </Link>
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="inline-flex justify-center items-center py-3 px-6 rounded-lg text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-400"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 mr-2"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <span>Kembali ke Atas</span>
-          </button>
+        {/* Footer */}
+        <div className="mt-8 text-center p-6 text-sm text-slate-500">
+          <p>
+            © 2023 DelPresence - Institut Teknologi Del. All rights reserved.
+          </p>
         </div>
       </main>
-
-      {/* Footer simpel */}
-      <footer className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-slate-500 border-t border-slate-200">
-        © {new Date().getFullYear()} Institut Teknologi Del • Sistem Manajemen
-        Akademik
-      </footer>
     </div>
   );
 }

@@ -9,24 +9,17 @@ import {
   Calendar,
   Users,
   ClipboardList,
-  Settings,
-  Shield,
   BarChart2,
-  FileText,
-  CheckSquare,
   UserCog,
   Building,
-  QrCode,
-  BookMarked,
-  Timer,
-  ListChecks,
-  UserCheck,
   FileOutput,
-  BellRing,
+  FileSpreadsheet,
+  AlertTriangle,
+  GraduationCap,
   School,
-  BarChartHorizontal,
-  FolderSync,
-  PersonStanding,
+  Layers,
+  BookCopy,
+  LibrarySquare,
 } from "lucide-react";
 import { getUserRole, UserRole } from "@/services/auth";
 import { useEffect, useState } from "react";
@@ -68,6 +61,7 @@ export function Sidebar() {
       </div>
 
       <nav className="px-3 py-4">
+        {/* Dashboard Menu */}
         <div className="mb-2">
           <p className="px-3 py-2 text-xs uppercase tracking-wider text-neutral-500 font-semibold">
             Menu Utama
@@ -93,8 +87,15 @@ export function Sidebar() {
               Dashboard
             </Link>
           </li>
+        </ul>
 
-          {/* Common menu items for all roles */}
+        {/* Academic Management */}
+        <div className="mb-2">
+          <p className="px-3 py-2 text-xs uppercase tracking-wider text-neutral-500 font-semibold">
+            Manajemen Akademik
+          </p>
+        </div>
+        <ul className="space-y-1 mb-6">
           <li>
             <Link
               href="/dashboard/courses"
@@ -157,544 +158,323 @@ export function Sidebar() {
         {/* Admin-specific menu items */}
         {userRole === UserRole.ADMIN && (
           <>
+            {/* Academic Administration */}
             <div className="mb-2">
               <p className="px-3 py-2 text-xs uppercase tracking-wider text-neutral-500 font-semibold">
-                Manajemen Admin
+                Administrasi Akademik
               </p>
             </div>
             <ul className="space-y-1 mb-6">
               <li>
                 <Link
-                  href="/dashboard/users"
+                  href="/dashboard/academic/departments"
                   className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/users")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
-                  }`}
-                >
-                  <UserCog
-                    className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/users")
-                        ? "text-primary"
-                        : "text-neutral-600 group-hover:text-primary"
-                    }`}
-                  />
-                  Manajemen Pengguna
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/course-management"
-                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/course-management")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
-                  }`}
-                >
-                  <BookMarked
-                    className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/course-management")
-                        ? "text-primary"
-                        : "text-neutral-600 group-hover:text-primary"
-                    }`}
-                  />
-                  Kelola Data Mata Kuliah
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/lecturer-assignment"
-                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/lecturer-assignment")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
-                  }`}
-                >
-                  <PersonStanding
-                    className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/lecturer-assignment")
-                        ? "text-primary"
-                        : "text-neutral-600 group-hover:text-primary"
-                    }`}
-                  />
-                  Penugasan Dosen
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/program-faculty"
-                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/program-faculty")
+                    isLinkActive("/dashboard/academic/departments")
                       ? "bg-primary/10 text-primary font-medium"
                       : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
                   }`}
                 >
                   <School
                     className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/program-faculty")
+                      isLinkActive("/dashboard/academic/departments")
                         ? "text-primary"
                         : "text-neutral-600 group-hover:text-primary"
                     }`}
                   />
-                  Program & Fakultas
+                  Program Studi
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/dashboard/campus-attendance"
+                  href="/dashboard/academic/buildings"
                   className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/campus-attendance")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
-                  }`}
-                >
-                  <BarChart2
-                    className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/campus-attendance")
-                        ? "text-primary"
-                        : "text-neutral-600 group-hover:text-primary"
-                    }`}
-                  />
-                  Dashboard Kehadiran
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/attendance-export"
-                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/attendance-export")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
-                  }`}
-                >
-                  <FileOutput
-                    className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/attendance-export")
-                        ? "text-primary"
-                        : "text-neutral-600 group-hover:text-primary"
-                    }`}
-                  />
-                  Ekspor Data Kehadiran
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/backup-restore"
-                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/backup-restore")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
-                  }`}
-                >
-                  <FolderSync
-                    className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/backup-restore")
-                        ? "text-primary"
-                        : "text-neutral-600 group-hover:text-primary"
-                    }`}
-                  />
-                  Backup & Restore
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/attendance-analytics"
-                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/attendance-analytics")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
-                  }`}
-                >
-                  <BarChartHorizontal
-                    className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/attendance-analytics")
-                        ? "text-primary"
-                        : "text-neutral-600 group-hover:text-primary"
-                    }`}
-                  />
-                  Analisis Statistik
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/campus"
-                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/campus")
+                    isLinkActive("/dashboard/academic/buildings")
                       ? "bg-primary/10 text-primary font-medium"
                       : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
                   }`}
                 >
                   <Building
                     className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/campus")
+                      isLinkActive("/dashboard/academic/buildings")
                         ? "text-primary"
                         : "text-neutral-600 group-hover:text-primary"
                     }`}
                   />
-                  Data Kampus
+                  Gedung
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/dashboard/security"
+                  href="/dashboard/academic/semesters"
                   className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/security")
+                    isLinkActive("/dashboard/academic/semesters")
                       ? "bg-primary/10 text-primary font-medium"
                       : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
                   }`}
                 >
-                  <Shield
+                  <Calendar
                     className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/security")
+                      isLinkActive("/dashboard/academic/semesters")
                         ? "text-primary"
                         : "text-neutral-600 group-hover:text-primary"
                     }`}
                   />
-                  Keamanan Sistem
+                  Tahun Akademik
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/dashboard/settings"
+                  href="/dashboard/academic/curriculum"
                   className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/settings")
+                    isLinkActive("/dashboard/academic/curriculum")
                       ? "bg-primary/10 text-primary font-medium"
                       : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
                   }`}
                 >
-                  <Settings
+                  <BookCopy
                     className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/settings")
+                      isLinkActive("/dashboard/academic/curriculum")
                         ? "text-primary"
                         : "text-neutral-600 group-hover:text-primary"
                     }`}
                   />
-                  Pengaturan Sistem
+                  Kurikulum
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/dashboard/courses/groups"
+                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
+                    isLinkActive("/dashboard/courses/groups")
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
+                  }`}
+                >
+                  <Layers
+                    className={`mr-3 h-5 w-5 ${
+                      isLinkActive("/dashboard/courses/groups")
+                        ? "text-primary"
+                        : "text-neutral-600 group-hover:text-primary"
+                    }`}
+                  />
+                  Kelompok Matakuliah
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/dashboard/rooms"
+                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
+                    isLinkActive("/dashboard/rooms")
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
+                  }`}
+                >
+                  <LibrarySquare
+                    className={`mr-3 h-5 w-5 ${
+                      isLinkActive("/dashboard/rooms")
+                        ? "text-primary"
+                        : "text-neutral-600 group-hover:text-primary"
+                    }`}
+                  />
+                  Ruangan
                 </Link>
               </li>
             </ul>
-          </>
-        )}
 
-        {/* Shared menu items for Lecturer and Assistant */}
-        {(userRole === UserRole.LECTURER ||
-          userRole === UserRole.ASSISTANT) && (
-          <>
+            {/* Schedule Management */}
             <div className="mb-2">
               <p className="px-3 py-2 text-xs uppercase tracking-wider text-neutral-500 font-semibold">
-                Menu Pengajar
+                Manajemen Jadwal
               </p>
             </div>
             <ul className="space-y-1 mb-6">
               <li>
                 <Link
-                  href="/dashboard/qr-generate"
+                  href="/dashboard/schedules/manage"
                   className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/qr-generate")
+                    isLinkActive("/dashboard/schedules/manage")
                       ? "bg-primary/10 text-primary font-medium"
                       : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
                   }`}
                 >
-                  <QrCode
+                  <Calendar
                     className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/qr-generate")
+                      isLinkActive("/dashboard/schedules/manage")
                         ? "text-primary"
                         : "text-neutral-600 group-hover:text-primary"
                     }`}
                   />
-                  Generate QR Kelas
+                  Jadwal Perkuliahan
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/dashboard/attendance-periods"
+                  href="/dashboard/schedules/import"
                   className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/attendance-periods")
+                    isLinkActive("/dashboard/schedules/import")
                       ? "bg-primary/10 text-primary font-medium"
                       : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
                   }`}
                 >
-                  <Timer
+                  <FileSpreadsheet
                     className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/attendance-periods")
+                      isLinkActive("/dashboard/schedules/import")
                         ? "text-primary"
                         : "text-neutral-600 group-hover:text-primary"
                     }`}
                   />
-                  Kelola Periode Presensi
+                  Import Excel
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/dashboard/student-list"
+                  href="/dashboard/schedules/rooms"
                   className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/student-list")
+                    isLinkActive("/dashboard/schedules/rooms")
                       ? "bg-primary/10 text-primary font-medium"
                       : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
                   }`}
                 >
-                  <Users
+                  <Building
                     className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/student-list")
+                      isLinkActive("/dashboard/schedules/rooms")
                         ? "text-primary"
                         : "text-neutral-600 group-hover:text-primary"
                     }`}
                   />
-                  Daftar Mahasiswa
+                  Penjadwalan Ruangan
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/dashboard/attendance-stats"
+                  href="/dashboard/schedules/conflicts"
                   className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/attendance-stats")
+                    isLinkActive("/dashboard/schedules/conflicts")
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
+                  }`}
+                >
+                  <AlertTriangle
+                    className={`mr-3 h-5 w-5 ${
+                      isLinkActive("/dashboard/schedules/conflicts")
+                        ? "text-primary"
+                        : "text-neutral-600 group-hover:text-primary"
+                    }`}
+                  />
+                  Pengecekan Konflik
+                </Link>
+              </li>
+            </ul>
+
+            {/* Attendance Management */}
+            <div className="mb-2">
+              <p className="px-3 py-2 text-xs uppercase tracking-wider text-neutral-500 font-semibold">
+                Manajemen Kehadiran
+              </p>
+            </div>
+            <ul className="space-y-1 mb-6">
+              <li>
+                <Link
+                  href="/dashboard/attendance/summary"
+                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
+                    isLinkActive("/dashboard/attendance/summary")
                       ? "bg-primary/10 text-primary font-medium"
                       : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
                   }`}
                 >
                   <BarChart2
                     className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/attendance-stats")
+                      isLinkActive("/dashboard/attendance/summary")
                         ? "text-primary"
                         : "text-neutral-600 group-hover:text-primary"
                     }`}
                   />
-                  Statistik Kehadiran
+                  Rekap Kehadiran
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/dashboard/realtime-monitor"
+                  href="/dashboard/attendance/reports"
                   className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/realtime-monitor")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
-                  }`}
-                >
-                  <ClipboardList
-                    className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/realtime-monitor")
-                        ? "text-primary"
-                        : "text-neutral-600 group-hover:text-primary"
-                    }`}
-                  />
-                  Monitor Kehadiran Real-time
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/leave-requests"
-                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/leave-requests")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
-                  }`}
-                >
-                  <CheckSquare
-                    className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/leave-requests")
-                        ? "text-primary"
-                        : "text-neutral-600 group-hover:text-primary"
-                    }`}
-                  />
-                  Persetujuan Izin
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/student-permissions"
-                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/student-permissions")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
-                  }`}
-                >
-                  <UserCheck
-                    className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/student-permissions")
-                        ? "text-primary"
-                        : "text-neutral-600 group-hover:text-primary"
-                    }`}
-                  />
-                  Tracking Perizinan
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/export-attendance"
-                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/export-attendance")
+                    isLinkActive("/dashboard/attendance/reports")
                       ? "bg-primary/10 text-primary font-medium"
                       : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
                   }`}
                 >
                   <FileOutput
                     className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/export-attendance")
+                      isLinkActive("/dashboard/attendance/reports")
                         ? "text-primary"
                         : "text-neutral-600 group-hover:text-primary"
                     }`}
                   />
-                  Ekspor Data Kehadiran
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/attendance-summary"
-                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/attendance-summary")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
-                  }`}
-                >
-                  <ListChecks
-                    className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/attendance-summary")
-                        ? "text-primary"
-                        : "text-neutral-600 group-hover:text-primary"
-                    }`}
-                  />
-                  Ringkasan Kehadiran Mata Kuliah
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/notifications"
-                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/notifications")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
-                  }`}
-                >
-                  <BellRing
-                    className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/notifications")
-                        ? "text-primary"
-                        : "text-neutral-600 group-hover:text-primary"
-                    }`}
-                  />
-                  Notifikasi Perizinan
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/dashboard/settings"
-                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/settings")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
-                  }`}
-                >
-                  <Settings
-                    className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/settings")
-                        ? "text-primary"
-                        : "text-neutral-600 group-hover:text-primary"
-                    }`}
-                  />
-                  Pengaturan
+                  Laporan Kehadiran
                 </Link>
               </li>
             </ul>
-          </>
-        )}
 
-        {/* Lecturer-specific additional features */}
-        {userRole === UserRole.LECTURER && (
-          <>
+            {/* User Management */}
             <div className="mb-2">
               <p className="px-3 py-2 text-xs uppercase tracking-wider text-neutral-500 font-semibold">
-                Khusus Dosen
+                Manajemen Pengguna
               </p>
             </div>
             <ul className="space-y-1 mb-6">
               <li>
                 <Link
-                  href="/dashboard/materials"
+                  href="/dashboard/academic/lecturers"
                   className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/materials")
+                    isLinkActive("/dashboard/academic/lecturers")
                       ? "bg-primary/10 text-primary font-medium"
                       : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
                   }`}
                 >
-                  <BookMarked
+                  <Users
                     className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/materials")
+                      isLinkActive("/dashboard/academic/lecturers")
                         ? "text-primary"
                         : "text-neutral-600 group-hover:text-primary"
                     }`}
                   />
-                  Materi Kuliah
+                  Daftar Dosen
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/dashboard/assignments"
+                  href="/dashboard/academic/assistants"
                   className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/assignments")
+                    isLinkActive("/dashboard/academic/assistants")
                       ? "bg-primary/10 text-primary font-medium"
                       : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
                   }`}
                 >
-                  <FileText
+                  <UserCog
                     className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/assignments")
+                      isLinkActive("/dashboard/academic/assistants")
                         ? "text-primary"
                         : "text-neutral-600 group-hover:text-primary"
                     }`}
                   />
-                  Tugas & Ujian
-                </Link>
-              </li>
-            </ul>
-          </>
-        )}
-
-        {/* Assistant-specific additional features */}
-        {userRole === UserRole.ASSISTANT && (
-          <>
-            <div className="mb-2">
-              <p className="px-3 py-2 text-xs uppercase tracking-wider text-neutral-500 font-semibold">
-                Khusus Asisten
-              </p>
-            </div>
-            <ul className="space-y-1 mb-6">
-              <li>
-                <Link
-                  href="/dashboard/lab-materials"
-                  className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/lab-materials")
-                      ? "bg-primary/10 text-primary font-medium"
-                      : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
-                  }`}
-                >
-                  <BookOpen
-                    className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/lab-materials")
-                        ? "text-primary"
-                        : "text-neutral-600 group-hover:text-primary"
-                    }`}
-                  />
-                  Materi Praktikum
+                  Daftar Asisten Dosen
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/dashboard/tasks"
+                  href="/dashboard/academic/students"
                   className={`flex items-center rounded-lg px-3 py-2 text-sm transition-all group ${
-                    isLinkActive("/dashboard/tasks")
+                    isLinkActive("/dashboard/academic/students")
                       ? "bg-primary/10 text-primary font-medium"
                       : "text-neutral-600 hover:bg-primary/10 hover:text-primary"
                   }`}
                 >
-                  <CheckSquare
+                  <GraduationCap
                     className={`mr-3 h-5 w-5 ${
-                      isLinkActive("/dashboard/tasks")
+                      isLinkActive("/dashboard/academic/students")
                         ? "text-primary"
                         : "text-neutral-600 group-hover:text-primary"
                     }`}
                   />
-                  Pemeriksaan Tugas
+                  Daftar Mahasiswa
                 </Link>
               </li>
             </ul>

@@ -187,6 +187,9 @@ export function saveTokens(tokens: CampusTokens): void {
   document.cookie = `token_expiry=${
     Date.now() + expiryTime * 1000
   }; path=/; max-age=${expiryTime}; SameSite=Strict`;
+
+  // Also save as campus_token for campus API integration
+  document.cookie = `campus_token=${tokens.token}; path=/; max-age=${expiryTime}; SameSite=Strict`;
 }
 
 // Save user info to cookies
@@ -218,6 +221,8 @@ export function logout(): void {
   document.cookie = "token_expiry=; path=/; max-age=0";
   document.cookie = "user=; path=/; max-age=0";
   document.cookie = "user_role=; path=/; max-age=0";
+  document.cookie = "campus_user_id=; path=/; max-age=0";
+  document.cookie = "campus_token=; path=/; max-age=0";
 }
 
 // Check if user is authenticated
@@ -261,9 +266,10 @@ export function isAssistant(): boolean {
   return getUserRole() === UserRole.ASSISTANT;
 }
 
-// Check if user is an admin
+// Check if user is logged in as admin
 export function isAdmin(): boolean {
-  return getUserRole() === UserRole.ADMIN;
+  const userRole = getCookie("user_role");
+  return userRole === UserRole.ADMIN;
 }
 
 // Get authenticated user
@@ -277,6 +283,65 @@ export function getUser(): CampusUser | null {
     return JSON.parse(userJson);
   } catch {
     return null;
+  }
+}
+
+// Get campus API token for admin operations
+export function getCampusToken(): string | null {
+  // First try to get the token from cookies
+  const token = getCookie("campus_token");
+
+  // Log the token status to console
+  console.log("getCampusToken called. Token exists:", !!token);
+
+  // If we have a token, return it
+  if (token) {
+    return token;
+  }
+
+  console.log("No campus token found in cookies, trying to refresh...");
+
+  // If we don't have a token in cookies, try to get a fresh one
+  // This is done in an async way, so we still return null here
+  // and let the caller handle the case when no token is available
+  refreshCampusToken().catch((err) =>
+    console.error("Failed to refresh campus token:", err)
+  );
+
+  return null;
+}
+
+/**
+ * Refresh the campus token by making a request to the backend
+ * This function is used internally by getCampusToken
+ */
+export async function refreshCampusToken(): Promise<string> {
+  const token = getCookie("access_token");
+
+  if (!token) {
+    throw new Error("Not authenticated");
+  }
+
+  const response = await fetch(`${API_URL}/auth/campus/token`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch campus token");
+  }
+
+  const data = await response.json();
+
+  // Store the campus token in a cookie
+  if (data.token) {
+    document.cookie = `campus_token=${data.token}; path=/; max-age=3000; SameSite=Strict`;
+    return data.token;
+  } else {
+    throw new Error("Invalid campus token response");
   }
 }
 
